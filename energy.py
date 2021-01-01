@@ -10,12 +10,8 @@ from scipy import fftpack as fft
 # ENERGY_HIGH = 70
 
 # Using ssq on fft
-ENERGY_LOW = 900
-ENERGY_HIGH = 10000
-
-ENERGY_RANGE = ENERGY_HIGH - ENERGY_LOW
-
-ENERGY_FILTER_LOWPASS = 120
+# ENERGY_LOW = 900
+# ENERGY_HIGH = 10000
 
 COLORS = [
     (255, 0, 0),
@@ -28,29 +24,35 @@ COLORS = [
 
 class AudioEnergy(object):
 
-    def __init__(self, sampleinfo, startchannel, ledcount, color_index = 0):
+    def __init__(self, sampleinfo, startchannel, ledcount, energylow, energyhigh, energylowpass, color_index, flashratio):
         self.sampleinfo = sampleinfo
         self.startchannel = startchannel
         self.ledcount = ledcount
+        self.energylow = energylow
+        self.energyhigh = energyhigh
+        self.energylowpass = energylowpass
         self.color_index = color_index
+        self.flashratio = flashratio
+
+        self.energyrange = self.energyhigh - self.energylow
 
         self.frequencies = fft.rfftfreq(sampleinfo.chunk, 1/sampleinfo.rate)
-        self.lowpass_cutoff = self.frequencies[self.frequencies < ENERGY_LOW]
+        self.lowpass_cutoff = self.frequencies[self.frequencies < self.energylow]
         self.color_frames = 0
 
     def frame(self, audio, audiofft, dmx):
-        filteredudio = audiofft[self.frequencies < ENERGY_FILTER_LOWPASS]
+        filteredudio = audiofft[self.frequencies < self.energylowpass]
         # maxenergy = np.max(filteredudio)
         ssq = np.sum(filteredudio**2)
 
-        if ssq < ENERGY_LOW:
+        if ssq < self.energylow:
             return
 
-        height = (ssq - ENERGY_LOW) / ENERGY_RANGE * self.ledcount
+        height = (ssq - self.energylow) / self.energyrange * self.ledcount
         height = int(min(height, self.ledcount))
 
         # if self.color_frames > self.sampleinfo.fps * 0.5 and height > 75:
-        if height > 75:
+        if height > self.ledcount * self.flashratio:
             self.color_frames = 0
             self.color_index += 1
 

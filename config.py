@@ -26,11 +26,14 @@ SAMPLE_INFO = SampleInfo(
 )
 
 PROCESSORS = [
-    AudioSpectrum(SAMPLE_INFO, 0, 412),
-    AudioEnergy(SAMPLE_INFO, 412, 100, 0),
-    AudioEnergy(SAMPLE_INFO, 512, 100, 1)
+    AudioSpectrum(SAMPLE_INFO, 0, 412, 50, 4500, 10, 50),
+    AudioEnergy(SAMPLE_INFO, 412, 100, 900, 10000, 120, 0, 0.75),
+    AudioEnergy(SAMPLE_INFO, 512, 100, 900, 10000, 120, 1, 0.75),
+    AudioSpectrum(SAMPLE_INFO, 612, 50, 50, 1300, 20, 50),
+    # AudioSpectrum(SAMPLE_INFO, 662, 50, 50, 1300, 20, 50)
+    AudioEnergy(SAMPLE_INFO, 662, 50, 900, 10000, 120, 0, .99)
 ]
 
 UNIVERSE_START = 5
-UNIVERSE_LAYOUT = [170, 170, 72, 100, 100]
+UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 50, 50]
 LEDS = sum(UNIVERSE_LAYOUT)

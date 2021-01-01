@@ -2,11 +2,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy import fftpack as fft
 
-ENERGY_LOW = 10
-ENERGY_HIGH = 50
-
-ENERGY_RANGE = ENERGY_HIGH - ENERGY_LOW
-
 COLORS = [
     (0, 0, 255),
     (0, 255, 255),
@@ -19,12 +14,15 @@ COLORS = [
 
 class AudioSpectrum(object):
 
-    def __init__(self, sampleinfo, startchannel, ledcount):
+    def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh):
         self.startchannel = startchannel
         self.ledcount = ledcount
         self.frequencies = fft.rfftfreq(sampleinfo.chunk, 1/sampleinfo.rate)
+        self.energylow = energylow
+        self.energyhigh = energyhigh
+        self.energyrange = self.energyhigh - self.energylow
         
-        bins = np.linspace(50, 4500, self.ledcount)
+        bins = np.linspace(lowfreq, highfreq, self.ledcount)
         binned = np.digitize(self.frequencies, bins)
         
         # Digitize returns a bin after our last bin for out-of-range items; chop it off
@@ -46,10 +44,10 @@ class AudioSpectrum(object):
         # maxvalues = [sum(map(lambda x:x*x,m)) if len(m) else 0 for m in newvalues]
 
         for (i,v) in enumerate(maxvalues):
-            if v < ENERGY_LOW:
+            if v < self.energylow:
                 continue
 
-            colorindex = (v - ENERGY_LOW) / ENERGY_RANGE * (len(COLORS) - 1)
+            colorindex = (v - self.energylow) / self.energyrange * (len(COLORS) - 1)
             colorindex = int(min(colorindex, len(COLORS) - 1))
             
             chan = self.startchannel + self.led_offset + i * self.led_multiple
