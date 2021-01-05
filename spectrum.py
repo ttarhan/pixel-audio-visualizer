@@ -14,13 +14,14 @@ COLORS = [
 
 class AudioSpectrum(object):
 
-    def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh):
+    def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh, reverse):
         self.startchannel = startchannel
         self.ledcount = ledcount
         self.frequencies = fft.rfftfreq(sampleinfo.chunk, 1/sampleinfo.rate)
         self.energylow = energylow
         self.energyhigh = energyhigh
         self.energyrange = self.energyhigh - self.energylow
+        self.reverse = reverse
         
         bins = np.linspace(lowfreq, highfreq, self.ledcount)
         binned = np.digitize(self.frequencies, bins)
@@ -43,6 +44,8 @@ class AudioSpectrum(object):
         maxvalues = [max(m) if len(m) else 0 for m in newvalues]
         # maxvalues = [sum(map(lambda x:x*x,m)) if len(m) else 0 for m in newvalues]
 
+        buffer = np.full((self.ledcount, 3), 0, dtype = np.uint8)
+
         for (i,v) in enumerate(maxvalues):
             if v < self.energylow:
                 continue
@@ -50,9 +53,11 @@ class AudioSpectrum(object):
             colorindex = (v - self.energylow) / self.energyrange * (len(COLORS) - 1)
             colorindex = int(min(colorindex, len(COLORS) - 1))
             
-            chan = self.startchannel + self.led_offset + i * self.led_multiple
+            chan = self.led_offset + i * self.led_multiple
             endchan = chan + self.led_multiple - 1
-            dmx[chan:endchan + 1] = COLORS[colorindex]
+            buffer[chan:endchan + 1] = COLORS[colorindex]
+
+        dmx[self.startchannel:self.startchannel+self.ledcount] = np.flip(buffer, 0) if self.reverse else buffer
 
         if self.ln is not None:
             self.ln.remove()
