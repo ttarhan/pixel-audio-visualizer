@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import pyaudio
 from spectrum import AudioSpectrum
 from energy import AudioEnergy
+from energy2 import AudioEnergy2
 
 @dataclass
 class SampleInfo(object):
@@ -33,10 +34,11 @@ PROCESSORS = [
     # AudioSpectrum(SAMPLE_INFO, 612, 50, 50, 1300, 20, 50, False),
     # AudioSpectrum(SAMPLE_INFO, 662, 50, 50, 1300, 20, 50)
     # AudioEnergy(SAMPLE_INFO, 662, 50, 900, 10000, 120, 0, .99)
-    AudioEnergy(SAMPLE_INFO, 612, 100, 900, 10000, 120, 2, 0.75)
+    AudioEnergy(SAMPLE_INFO, 612, 100, 900, 10000, 120, 2, 0.75),
+    AudioEnergy2(SAMPLE_INFO, 712, 85, 900, 30000, 120, 0, 0.90)
 ]
 
 UNIVERSE_START = 5
 #UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 50, 50]
-UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 100]
+UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 100, 85]
 LEDS = sum(UNIVERSE_LAYOUT)
