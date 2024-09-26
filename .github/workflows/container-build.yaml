@@ -28,4 +28,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
