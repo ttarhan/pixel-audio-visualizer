@@ -21,7 +21,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
           env:
             - name: PYTHONUNBUFFERED
-              value: 1
+              value: "1"
           resources:
             limits:
               device.k8.ttar.org/audio: "1"
