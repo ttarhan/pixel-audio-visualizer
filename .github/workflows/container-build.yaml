@@ -1,5 +1,8 @@
 name: Build container image
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 env:
   REGISTRY: ghcr.io
@@ -22,10 +25,16 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ env.IMAGE_USER }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
