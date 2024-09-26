@@ -18,9 +18,9 @@ spec:
         - name: app
           image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
           resources:
-          limits:
-            device.k8.ttar.org/audio: "1"
-            device.k8.ttar.org/usbsound: "1"
+            limits:
+              device.k8.ttar.org/audio: "1"
+              device.k8.ttar.org/usbsound: "1"
           securityContext:
             capabilities:
               add: ["SYS_NICE"]
