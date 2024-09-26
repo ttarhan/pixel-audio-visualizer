@@ -1,0 +1,25 @@
+[project]
+name = "pixel-audio-visualizer"
+version = "0.0.1"
+description = "Realtime audio visualizer"
+authors = [
+    {name = "Tolga Tarhan", email = "ttarhan@users.noreply.github.com"},
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+dependencies = [
+    "pyaudio>=0.2.14",
+    "matplotlib>=3.9.2",
+    "numpy>=2.1.1",
+    "scipy>=1.14.1",
+    "sacn>=1.10.0",
+]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+

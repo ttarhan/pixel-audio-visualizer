@@ -1,0 +1,6 @@
+__pycache__
+.mypy_cache
+.pdm-build
+.venv
+.vscode
+.pdm-python
