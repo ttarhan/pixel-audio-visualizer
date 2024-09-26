@@ -79,4 +79,4 @@ jobs:
           helm package ./chart
       - name: Helm chart push
         run: |
-          helm push ./pixel-audio-visualizer-chart-${{ steps.meta.outputs.version }}.tgz oci://${{ env.REGISTRY }}
+          helm push ./pixel-audio-visualizer-chart-${{ steps.meta.outputs.version }}.tgz oci://${{ env.REGISTRY }}/${{ env.IMAGE_USER }}
