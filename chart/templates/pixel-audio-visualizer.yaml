@@ -15,7 +15,8 @@ spec:
         app: pixel-visualizer
     spec:
       containers:
-        - image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
           resources:
           limits:
             device.k8.ttar.org/audio: "1"
