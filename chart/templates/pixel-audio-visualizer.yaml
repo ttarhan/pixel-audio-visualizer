@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pixel-visualizer
+  labels:
+    app: pixel-visualizer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pixel-visualizer
+  template:
+    metadata:
+      labels:
+        app: pixel-visualizer
+    spec:
+      containers:
+        - image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
+          resources:
+          limits:
+            device.k8.ttar.org/audio: "1"
+            device.k8.ttar.org/usbsound: "1"
+          securityContext:
+            capabilities:
+              add: ["SYS_NICE"]

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pixel-audio-visualizer
+description: Pixel Audio Visualizer
+
+version: VERSION
+appVersion: VERSION
