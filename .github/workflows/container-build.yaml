@@ -1,8 +1,15 @@
 name: Build container image
+
 on:
+  workflow_dispatch:
   push:
     branches:
-      - master
+      - 'master'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'master'
 
 env:
   REGISTRY: ghcr.io
