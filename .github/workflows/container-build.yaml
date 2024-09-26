@@ -71,7 +71,7 @@ jobs:
             type=ref,event=branch
       - name: Helm chart version
         run: |
-          sed -i "s/VERSION/${{ steps.meta.outputs.tags }}/" chart/Chart.yaml
+          sed -i "s/VERSION/${{ steps.meta.outputs.version }}/" chart/Chart.yaml
       - name: Helm chart package
         run: |
           helm package ./chart
