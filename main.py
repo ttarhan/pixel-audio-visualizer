@@ -78,13 +78,11 @@ class AudioAnalyer(object):
                 # print(f'U: {universe}, Chan: {chan}, End: {endchan}')
                 # print(np.reshape(dmx[chan:endchan + 1], -1))
 
-                dmx[0] = [1,2,3]
-
                 array = np.reshape(dmx[chan:endchan + 1], -1) # Flatten RGB
                 array = tuple(array.tobytes())
                 sender[universe].dmx_data = array
 
-                print(sender[universe].dmx_data)
+                # print(sender[universe].dmx_data)
                 chan += count
 
             # print(f'Diff: {round(time.time()-lt,4)}')
