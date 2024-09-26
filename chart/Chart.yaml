@@ -2,5 +2,5 @@ apiVersion: v2
 name: pixel-audio-visualizer
 description: Pixel Audio Visualizer
 
-version: VERSION
-appVersion: VERSION
+version: CHART_VERSION
+appVersion: APP_VERSION

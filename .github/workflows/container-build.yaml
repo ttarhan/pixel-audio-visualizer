@@ -51,6 +51,7 @@ jobs:
 
 
   helm-publish:
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: build
     runs-on: ubuntu-24.04
     steps:
@@ -68,10 +69,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
+            type=semver,pattern={{version}}
       - name: Helm chart version
         run: |
-          sed -i "s/VERSION/${{ steps.meta.outputs.version }}/" chart/Chart.yaml
+          sed -i "s/CHART_VERSION/${{ steps.meta.outputs.version }}/" chart/Chart.yaml
+          sed -i "s/APP_VERSION/v${{ steps.meta.outputs.version }}/" chart/Chart.yaml
       - name: Helm chart package
         run: |
           helm package ./chart
