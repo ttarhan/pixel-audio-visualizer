@@ -22,6 +22,8 @@ spec:
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
+            - name: BIND_ADDRESS
+              value: {{ .Values.bind_address | default "0.0.0.0" | quote }}
           resources:
             limits:
               device.k8.ttar.org/audio: "1"

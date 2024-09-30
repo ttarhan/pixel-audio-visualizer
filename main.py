@@ -1,26 +1,48 @@
+import os
+import time
 import pyaudio
 import numpy as np
 from scipy import fftpack as fft
 import sacn
-import time
 from config import *
 
 np.set_printoptions(threshold=500000)
 
+BIND_ADDRESS = os.environ.get("BIND_ADDRESS", "0.0.0.0")
+
 class AudioAnalyer(object):
+    """
+    The audio analyzer
+    """
 
     def __init__(self):
-        pass
+        self.sender = None
+
+    def _start_sender(self):
+        self._stop_sender()
+
+        self.sender = sacn.sACNsender(fps=DMX_FPS, 
+                                      universeDiscovery=False, 
+                                      bind_address=BIND_ADDRESS)
+
+        for (i,_count) in enumerate(UNIVERSE_LAYOUT):
+            universe = i + UNIVERSE_START
+            self.sender.activate_output(universe)
+            self.sender[universe].multicast = True
+
+        self.sender.start()
+
+    def _stop_sender(self):
+        if self.sender:
+            self.sender.stop()
+
+        self.sender = None
 
     def run(self):
+        """
+        Starts listening for audio
+        """
         # Startup
-        sender = sacn.sACNsender(fps=DMX_FPS)
-
-        for (i,count) in enumerate(UNIVERSE_LAYOUT):
-            universe = i + UNIVERSE_START
-            sender.activate_output(universe)
-            sender[universe].multicast = True
-
         audio = pyaudio.PyAudio()
 
         stream = audio.open(format=FORMAT,
@@ -46,7 +68,7 @@ class AudioAnalyer(object):
 
                 if not active:
                     print("Starting")
-                    sender.start()
+                    self._start_sender()
                     active = True
             
             else:
@@ -54,7 +76,7 @@ class AudioAnalyer(object):
 
                 if active and silent_frames > (FRAME_FPS * SILENCE_SECONDS):
                     print("Stopping")
-                    sender.stop()
+                    self._stop_sender()
                     active = False
 
             if not active:
@@ -80,7 +102,7 @@ class AudioAnalyer(object):
 
                 array = np.reshape(dmx[chan:endchan + 1], -1) # Flatten RGB
                 array = tuple(array.tobytes())
-                sender[universe].dmx_data = array
+                self.sender[universe].dmx_data = array
 
                 # print(sender[universe].dmx_data)
                 chan += count
@@ -89,7 +111,7 @@ class AudioAnalyer(object):
             lt = time.time()
 
         # Cleanup
-        sender.stop()
+        self._stop_sender()
         stream.stop_stream()
         stream.close()
         audio.terminate()
