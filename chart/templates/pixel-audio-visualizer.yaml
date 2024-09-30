@@ -1,20 +1,36 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
   name: pixel-visualizer
   labels:
     app: pixel-visualizer
 spec:
-  replicas: 1
-  strategy: 
-    type: Recreate
+  clusterIP: None
+  selector:
+    app: pixel-visualizer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pixel-visualizer
+  labels:
+    app: pixel-visualizer
+spec:
   selector:
     matchLabels:
       app: pixel-visualizer
+  serviceName: pixel-visualizer
+  replicas: 1
   template:
     metadata:
       labels:
         app: pixel-visualizer
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name" : "pixel-network"
+          }
+        ]'
     spec:
       containers:
         - name: app
@@ -23,7 +39,9 @@ spec:
             - name: PYTHONUNBUFFERED
               value: "1"
             - name: BIND_ADDRESS
-              value: {{ .Values.bind_address | default "0.0.0.0" | quote }}
+              value: {{ required "An sender IP must be provided" .Values.sender_ip | quote }}
+            - name: CAPTURE_GAIN
+              value: {{ .Values.capture_gain | default "5" | quote }}
           resources:
             limits:
               device.k8.ttar.org/audio: "1"

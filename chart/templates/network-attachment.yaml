@@ -1,0 +1,21 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: pixel-network
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "pixel-network",
+    "type": "vlan",
+    "master": "eth0",
+    "vlanId": 10,
+    "linkInContainer": false,
+    "ipam": {
+      "type": "static",
+      "addresses": [
+        {
+          "address": "{{ required "An sender IP must be provided" .Values.sender_ip }}/24"
+        }
+      ]
+    }
+  }'

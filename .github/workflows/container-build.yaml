@@ -72,8 +72,8 @@ jobs:
             type=semver,pattern={{version}}
       - name: Helm chart version
         run: |
-          sed -i "s/CHART_VERSION/${{ steps.meta.outputs.version }}/" chart/Chart.yaml
-          sed -i "s/APP_VERSION/v${{ steps.meta.outputs.version }}/" chart/Chart.yaml
+          sed -i "s/0.0.0/${{ steps.meta.outputs.version }}/" chart/Chart.yaml
+          sed -i "s/latest/v${{ steps.meta.outputs.version }}/" chart/Chart.yaml
       - name: Helm chart package
         run: |
           helm package ./chart

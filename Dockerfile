@@ -17,5 +17,6 @@ RUN pdm install
 COPY * .
 
 ENV PA_MIN_LATENCY_MSEC=4
+ENV CAPTURE_GAIN=5
 
-CMD ./run2.sh
+CMD ./run.sh
