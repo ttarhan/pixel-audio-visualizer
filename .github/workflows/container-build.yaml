@@ -49,6 +49,15 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  create-release:
+    if: github.ref == 'master'
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
 
   helm-publish:
     if: startsWith(github.ref, 'refs/tags/v')
