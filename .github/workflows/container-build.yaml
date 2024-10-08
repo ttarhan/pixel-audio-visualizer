@@ -50,7 +50,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   create-release:
-    if: github.ref == 'master'
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-24.04
     steps:
