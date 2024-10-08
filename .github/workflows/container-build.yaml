@@ -56,9 +56,9 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          command: release
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: simple
-          skip-github-pull-request: true
 
   helm-publish:
     if: startsWith(github.ref, 'refs/tags/v')
