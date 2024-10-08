@@ -1,4 +1,4 @@
-FROM python:3.12-bookworm
+FROM python:3.13-bookworm
 
 RUN apt update && \
     apt install -y portaudio19-dev libasound2-dev alsa-utils && \
