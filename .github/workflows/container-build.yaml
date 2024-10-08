@@ -56,7 +56,6 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          command: release
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: simple
 
