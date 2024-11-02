@@ -36,8 +36,8 @@ PROCESSORS = [
     # AudioEnergy(SAMPLE_INFO, 662, 50, 900, 10000, 120, 0, .99)
     AudioEnergy(SAMPLE_INFO, 612, 100, 900, 10000, 120, 2, 0.75),
     AudioEnergy2(SAMPLE_INFO, 712, 85, 900, 30000, 120, 0, 0.90),
-    AudioSpectrum(SAMPLE_INFO, 797, 259, 50, 4500, 10, 50, False),
-    AudioSpectrum(SAMPLE_INFO, 1056, 209, 50, 4500, 10, 50, True),
+    AudioSpectrum(SAMPLE_INFO, 797, 221, 50, 4500, 10, 50, False),
+    # AudioSpectrum(SAMPLE_INFO, 1056, 209, 50, 4500, 10, 50, True),
     #AudioEnergy(SAMPLE_INFO, 1056, 209, 800, 10000, 90, 0, 0.99)
 ]
     #def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh, reverse):
@@ -45,5 +45,5 @@ PROCESSORS = [
 
 UNIVERSE_START = 5
 #UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 50, 50]
-UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 100, 85, 170, 170, 128]
+UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 100, 85, 170, 51]
 LEDS = sum(UNIVERSE_LAYOUT)
