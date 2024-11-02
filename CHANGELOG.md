@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/ttarhan/pixel-audio-visualizer/compare/v2.0.0...v2.0.1) (2024-11-02)
+
+
+### Bug Fixes
+
+* Update config.py ([e6beff4](https://github.com/ttarhan/pixel-audio-visualizer/commit/e6beff4cd8fc0c1befa9ab19dda44224b818b419))
+
 ## [2.0.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v1.0.12...v2.0.0) (2024-10-08)
 
 
