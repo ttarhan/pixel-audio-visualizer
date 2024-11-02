@@ -38,7 +38,7 @@ PROCESSORS = [
     AudioEnergy2(SAMPLE_INFO, 712, 85, 900, 30000, 120, 0, 0.90),
     AudioSpectrum(SAMPLE_INFO, 797, 221, 50, 4500, 10, 50, False),
     # AudioSpectrum(SAMPLE_INFO, 1056, 209, 50, 4500, 10, 50, True),
-    #AudioEnergy(SAMPLE_INFO, 1056, 209, 800, 10000, 90, 0, 0.99)
+    # AudioEnergy(SAMPLE_INFO, 1056, 209, 800, 10000, 90, 0, 0.99)
 ]
     #def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh, reverse):
     #def __init__(self, sampleinfo, startchannel, ledcount, energylow, energyhigh, energylowpass, color_index, flashratio):
