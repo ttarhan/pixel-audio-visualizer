@@ -1,6 +1,8 @@
 import numpy as np
 from scipy import fftpack as fft
 
+from effect import Effect
+
 # Using max on amplitude
 # ENERGY_LOW = 0.1
 # ENERGY_HIGH = 0.5
@@ -22,12 +24,14 @@ COLORS = [
     (255, 0, 255)
 ]
 
-class AudioEnergy2(object):
+class AudioEnergy2(Effect):
+    """
+    A simple meter based on the volume between below a low pass filter
+    """
 
-    def __init__(self, sampleinfo, startchannel, ledcount, energylow, energyhigh, energylowpass, color_index, flashratio):
+    def __init__(self, sampleinfo, led_count, energylow, energyhigh, energylowpass, color_index, flashratio):
+        super().__init__(led_count)
         self.sampleinfo = sampleinfo
-        self.startchannel = startchannel
-        self.ledcount = ledcount
         self.energylow = energylow
         self.energyhigh = energyhigh
         self.energylowpass = energylowpass
@@ -40,7 +44,7 @@ class AudioEnergy2(object):
         self.lowpass_cutoff = self.frequencies[self.frequencies < self.energylow]
         self.color_frames = 0
 
-    def frame(self, audio, audiofft, dmx):
+    def render(self, audio, audiofft, data):
         filteredudio = audiofft[self.frequencies < self.energylowpass]
         # maxenergy = np.max(filteredudio)
 
@@ -58,6 +62,4 @@ class AudioEnergy2(object):
 
         self.color_frames += 1
 
-        dmx[self.startchannel:self.startchannel + self.ledcount] = np.asarray(COLORS[self.color_index % len(COLORS)]) * np.asarray((brightness, brightness, brightness))
-        #print(brightness)
-        #print(ssq)
+        data[0:0 + self.led_count] = np.asarray(COLORS[self.color_index % len(COLORS)]) * np.asarray((brightness, brightness, brightness))

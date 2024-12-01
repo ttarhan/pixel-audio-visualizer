@@ -1,8 +1,6 @@
 import numpy as np
 from scipy import fftpack as fft
 
-from effect import Effect
-
 # Using max on amplitude
 # ENERGY_LOW = 0.1
 # ENERGY_HIGH = 0.5
@@ -24,14 +22,12 @@ COLORS = [
     (255, 0, 255)
 ]
 
-class AudioEnergy(Effect):
-    """
-    A simple meter that lights up pixels to a "height" based on the volume between below a low pass filter
-    """
+class AudioEnergy2(object):
 
-    def __init__(self, sampleinfo, led_count, energylow, energyhigh, energylowpass, color_index, flashratio):
-        super().__init__(led_count)
+    def __init__(self, sampleinfo, startchannel, ledcount, energylow, energyhigh, energylowpass, color_index, flashratio):
         self.sampleinfo = sampleinfo
+        self.startchannel = startchannel
+        self.ledcount = ledcount
         self.energylow = energylow
         self.energyhigh = energyhigh
         self.energylowpass = energylowpass
@@ -44,20 +40,24 @@ class AudioEnergy(Effect):
         self.lowpass_cutoff = self.frequencies[self.frequencies < self.energylow]
         self.color_frames = 0
 
-    def render(self, audio, audiofft, data):
+    def frame(self, audio, audiofft, dmx):
         filteredudio = audiofft[self.frequencies < self.energylowpass]
+        # maxenergy = np.max(filteredudio)
+
         ssq = np.sum(filteredudio**2)
 
-        if ssq < self.energylow:
-            return
+        #if ssq < self.energylow:
+        #    return
 
-        height = (ssq - self.energylow) / self.energyrange * self.led_count
-        height = int(min(height, self.led_count))
+        brightness = (ssq - self.energylow) / self.energyrange * 0.75 + 0.25
+        brightness = min(brightness, 1)
 
-        if height > self.led_count * self.flashratio:
+        if brightness > self.flashratio:
             self.color_frames = 0
             self.color_index += 1
 
         self.color_frames += 1
 
-        data[0:0 + height] = COLORS[self.color_index % len(COLORS)]
+        dmx[self.startchannel:self.startchannel + self.ledcount] = np.asarray(COLORS[self.color_index % len(COLORS)]) * np.asarray((brightness, brightness, brightness))
+        #print(brightness)
+        #print(ssq)

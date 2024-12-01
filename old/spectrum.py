@@ -1,7 +1,6 @@
 import numpy as np
+from matplotlib import pyplot as plt
 from scipy import fftpack as fft
-
-from effect import Effect
 
 COLORS = [
     (0, 0, 255),
@@ -13,43 +12,39 @@ COLORS = [
     (255, 0, 255) 
 ]
 
-class AudioSpectrum(Effect):
-    """
-    AudioSpectrum
-    """
+class AudioSpectrum(object):
 
-    def __init__(self, sampleinfo, led_count, lowfreq, highfreq, energylow, energyhigh, reverse):
-        super().__init__(led_count)
-        self.sampleinfo = sampleinfo
-
+    def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh, reverse):
+        self.startchannel = startchannel
+        self.ledcount = ledcount
         self.frequencies = fft.rfftfreq(sampleinfo.chunk, 1/sampleinfo.rate)
         self.energylow = energylow
         self.energyhigh = energyhigh
         self.energyrange = self.energyhigh - self.energylow
         self.reverse = reverse
         
-        bins = np.linspace(lowfreq, highfreq, self.led_count)
+        bins = np.linspace(lowfreq, highfreq, self.ledcount)
         binned = np.digitize(self.frequencies, bins)
         
         # Digitize returns a bin after our last bin for out-of-range items; chop it off
-        self.binned = binned[binned < self.led_count]
+        self.binned = binned[binned < self.ledcount]
 
         # How many unique bins did we end up with?
         usable_bins = np.unique(self.binned).size
 
-        self.led_multiple = int(self.led_count / usable_bins)
-        self.led_offset = int((self.led_count - usable_bins * self.led_multiple) / 2)
+        self.led_multiple = int(self.ledcount / usable_bins)
+        self.led_offset = int((self.ledcount - usable_bins * self.led_multiple) / 2)
 
         self.ln = None
 
-    def render(self, audio, audiofft, data):
+    def frame(self, audio, audiofft, dmx):
         # dBS = 10 * np.log10(audiofft)
 
         newvalues = list(groupbins(self.binned, audiofft))
         maxvalues = [max(m) if len(m) else 0 for m in newvalues]
         # maxvalues = [sum(map(lambda x:x*x,m)) if len(m) else 0 for m in newvalues]
 
-        buffer = np.full((self.led_count, 3), 0, dtype = np.uint8)
+        buffer = np.full((self.ledcount, 3), 0, dtype = np.uint8)
 
         for (i,v) in enumerate(maxvalues):
             if v < self.energylow:
@@ -62,7 +57,7 @@ class AudioSpectrum(Effect):
             endchan = chan + self.led_multiple - 1
             buffer[chan:endchan + 1] = COLORS[colorindex]
 
-        data[0:0 + self.led_count] = np.flip(buffer, 0) if self.reverse else buffer
+        dmx[self.startchannel:self.startchannel+self.ledcount] = np.flip(buffer, 0) if self.reverse else buffer
 
         if self.ln is not None:
             self.ln.remove()

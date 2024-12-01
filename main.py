@@ -4,7 +4,7 @@ import pyaudio
 import numpy as np
 from scipy import fftpack as fft
 import sacn
-from config import *
+from config import ELEMENTS, DMX_FPS, FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_SECONDS, FRAME_FPS
 
 np.set_printoptions(threshold=500000)
 
@@ -17,16 +17,16 @@ class AudioAnalyer(object):
 
     def __init__(self):
         self.sender = None
+        self.universes = tuple(universe for element in ELEMENTS for universe in element.get_universes())
 
     def _start_sender(self):
         self._stop_sender()
 
-        self.sender = sacn.sACNsender(fps=DMX_FPS, 
-                                      universeDiscovery=False, 
+        self.sender = sacn.sACNsender(fps=DMX_FPS,
+                                      universeDiscovery=False,
                                       bind_address=BIND_ADDRESS)
 
-        for (i,_count) in enumerate(UNIVERSE_LAYOUT):
-            universe = i + UNIVERSE_START
+        for universe in self.universes:
             self.sender.activate_output(universe)
             self.sender[universe].multicast = True
 
@@ -57,6 +57,9 @@ class AudioAnalyer(object):
         active = False
         silent_frames = 0
 
+        self._start_sender()
+        active = True
+
         while run:
             # Input
             raw = stream.read(CHUNK, exception_on_overflow=False)
@@ -86,26 +89,14 @@ class AudioAnalyer(object):
             audiofft = abs(fft.rfft(audio))
 
             # Run processors
-            dmx = np.full((LEDS, 3), 0, dtype = np.uint8)
-
-            for p in PROCESSORS:
-                p.frame(audio, audiofft, dmx)
+            for e in ELEMENTS:
+                universe_data = e.render(audio, audiofft)
 
             # Process output
-            chan = 0
-
-            for (i,count) in enumerate(UNIVERSE_LAYOUT):
-                universe = i + UNIVERSE_START
-                endchan = chan + count - 1
-                # print(f'U: {universe}, Chan: {chan}, End: {endchan}')
-                # print(np.reshape(dmx[chan:endchan + 1], -1))
-
-                array = np.reshape(dmx[chan:endchan + 1], -1) # Flatten RGB
-                array = tuple(array.tobytes())
-                self.sender[universe].dmx_data = array
-
-                # print(sender[universe].dmx_data)
-                chan += count
+            for universe in self.universes:
+                flatened = np.reshape(universe_data[universe], -1) # Flatten RGB
+                flatened = tuple(flatened.tobytes())
+                self.sender[universe].dmx_data = flatened
 
             # print(f'Diff: {round(time.time()-lt,4)}')
             lt = time.time()
