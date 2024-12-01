@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from effect import Effect
+from .effect import Effect
 
 MAX_PIXELS_PER_UNIVERSE = 170
 

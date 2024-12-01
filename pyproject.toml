@@ -16,10 +16,15 @@ dependencies = [
     "sacn>=1.10.0",
 ]
 
+[project.scripts]
+visualizercli = "visualizer.__main__:main"
+
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["setuptools >= 75.3"]
+build-backend = "setuptools.build_meta"
 
-[tool.pdm]
-distribution = true
+[tool.uv]
+package = true
 
+[tool.setuptools]
+packages = ["visualizer"]

@@ -4,13 +4,14 @@ import pyaudio
 import numpy as np
 from scipy import fftpack as fft
 import sacn
-from config import ELEMENTS, DMX_FPS, FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_SECONDS, FRAME_FPS
+
+from .config import ELEMENTS, DMX_FPS, FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_SECONDS, FRAME_FPS
 
 np.set_printoptions(threshold=500000)
 
 BIND_ADDRESS = os.environ.get("BIND_ADDRESS", "0.0.0.0")
 
-class AudioAnalyer(object):
+class Visualizer(object):
     """
     The audio analyzer
     """
@@ -106,5 +107,3 @@ class AudioAnalyer(object):
         stream.stop_stream()
         stream.close()
         audio.terminate()
-
-AudioAnalyer().run()

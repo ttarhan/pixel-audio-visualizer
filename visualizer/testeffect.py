@@ -1,6 +1,6 @@
 import numpy as np
 
-from effect import Effect
+from .effect import Effect
 
 class TestEffect(Effect):
     """

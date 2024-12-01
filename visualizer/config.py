@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 import pyaudio
 
-from element import Element
+from .element import Element
 
-#from spectrum import AudioSpectrum
-from energy import AudioEnergy
-from testeffect import TestEffect
-#from energy2 import AudioEnergy2
+from .spectrum import AudioSpectrum
+from .energy import AudioEnergy
+from .energy2 import AudioEnergy2
+from .testeffect import TestEffect
 
 @dataclass
 class SampleInfo(object):

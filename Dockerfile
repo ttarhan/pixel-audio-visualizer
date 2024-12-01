@@ -4,17 +4,18 @@ RUN apt update && \
     apt install -y portaudio19-dev libasound2-dev alsa-utils && \
     rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
-RUN pip install --user pdm
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
-ENV PATH="$PATH:/root/.local/bin"
+ENV PATH="/root/.local/bin:${PATH}"
 
 WORKDIR /app
 
-COPY pyproject.toml pdm.lock README.md LICENSE .
+COPY pyproject.toml uv.lock README.md LICENSE .
+COPY visualizer/__init__.py visualizer/
+RUN uv sync
 
-RUN pdm install
-
-COPY * .
+COPY . .
+RUN uv sync
 
 ENV PA_MIN_LATENCY_MSEC=4
 ENV CAPTURE_GAIN=5

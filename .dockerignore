@@ -1,6 +1,13 @@
 __pycache__
 .mypy_cache
-.pdm-build
 .venv
 .vscode
-.pdm-python
+*.pyc
+*.egg-info
+CHANGELOG.md
+Dockerfile
+.github
+.git
+.gitattributes
+.gitignore
+chart

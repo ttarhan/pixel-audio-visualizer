@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import fftpack as fft
 
-from effect import Effect
+from .effect import Effect
 
 COLORS = [
     (0, 0, 255),
