@@ -90,8 +90,11 @@ class Visualizer(object):
             audiofft = abs(fft.rfft(audio))
 
             # Run processors
+            universe_data = dict()
+
             for e in ELEMENTS:
-                universe_data = e.render(audio, audiofft)
+                render_result = e.render(audio, audiofft)
+                universe_data.update(render_result)
 
             # Process output
             for universe in self.universes:

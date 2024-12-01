@@ -27,13 +27,13 @@ class Element:
         self.num_universes = math.ceil(led_count/MAX_PIXELS_PER_UNIVERSE)
         self.effects = []
 
-    def add_effect(self, effect, position = 0, led_count = 0):
+    def add_effect(self, effect, position = 0):
         """
         Add an effect to the element at the given position
         """
         self.effects.append(EffectInstance(
             position  = position,
-            led_count = led_count if led_count else self.led_count,
+            led_count = effect.led_count if effect.led_count else self.led_count,
             effect    = effect
         ))
 

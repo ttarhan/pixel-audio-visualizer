@@ -29,7 +29,7 @@ class AudioEnergy(Effect):
     A simple meter that lights up pixels to a "height" based on the volume between below a low pass filter
     """
 
-    def __init__(self, sampleinfo, led_count, energylow, energyhigh, energylowpass, color_index, flashratio):
+    def __init__(self, sampleinfo, led_count, *, energylow=900, energyhigh=10000, energylowpass=120, color_index=0, flashratio=0.75):
         super().__init__(led_count)
         self.sampleinfo = sampleinfo
         self.energylow = energylow

@@ -30,35 +30,17 @@ SAMPLE_INFO = SampleInfo(
     fps = FRAME_FPS
 )
 
-# PROCESSORS = [
-#     AudioSpectrum(SAMPLE_INFO, 0, 206, 50, 4500, 10, 50, False),
-#     AudioSpectrum(SAMPLE_INFO, 206, 206, 50, 4500, 10, 50, True),
-#     AudioEnergy(SAMPLE_INFO, 412, 100, 900, 10000, 120, 0, 0.75),
-#     AudioEnergy(SAMPLE_INFO, 512, 100, 900, 10000, 120, 1, 0.75),
-#     # AudioSpectrum(SAMPLE_INFO, 612, 50, 50, 1300, 20, 50, False),
-#     # AudioSpectrum(SAMPLE_INFO, 662, 50, 50, 1300, 20, 50)
-#     # AudioEnergy(SAMPLE_INFO, 662, 50, 900, 10000, 120, 0, .99)
-#     AudioEnergy(SAMPLE_INFO, 612, 100, 900, 10000, 120, 2, 0.75),
-#     AudioEnergy2(SAMPLE_INFO, 712, 85, 900, 30000, 120, 0, 0.90),
-#     AudioSpectrum(SAMPLE_INFO, 797, 221, 50, 4500, 10, 50, False),
-#     # AudioSpectrum(SAMPLE_INFO, 1056, 209, 50, 4500, 10, 50, True),
-#     # AudioEnergy(SAMPLE_INFO, 1056, 209, 800, 10000, 90, 0, 0.99)
-# ]
-#     #def __init__(self, sampleinfo, startchannel, ledcount, lowfreq, highfreq, energylow, energyhigh, reverse):
-#     #def __init__(self, sampleinfo, startchannel, ledcount, energylow, energyhigh, energylowpass, color_index, flashratio):
+pool_side = Element(5, 412)
+pool_side.add_effect(AudioSpectrum(SAMPLE_INFO, 206), position=0)
+pool_side.add_effect(AudioSpectrum(SAMPLE_INFO, 206, reverse=True), position=206)
 
-# kylies_room = Element(12, 221)
-# kylies_room.add_effect(AudioEnergy(SAMPLE_INFO, kylies_room.led_count, 900, 10000, 120, 2, 0.75))
+pool_tree_one = Element(8, 100)
+pool_tree_one.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_one.led_count))
 
-# ELEMENTS = [kylies_room]
+pool_tree_two = Element(9, 100)
+pool_tree_two.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_two.led_count, color_index=1))
 
-testel = Element(5, 341)
-testel.add_effect(TestEffect(341))
+kylies_room = Element(12, 221)
+kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
 
-ELEMENTS = [testel]
-
-
-# UNIVERSE_START = 5
-# #UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 50, 50]
-# UNIVERSE_LAYOUT = [170, 170, 72, 100, 100, 100, 85, 170, 51]
-# LEDS = sum(UNIVERSE_LAYOUT)
+ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, kylies_room]

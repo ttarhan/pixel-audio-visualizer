@@ -18,7 +18,7 @@ class AudioSpectrum(Effect):
     AudioSpectrum
     """
 
-    def __init__(self, sampleinfo, led_count, lowfreq, highfreq, energylow, energyhigh, reverse):
+    def __init__(self, sampleinfo, led_count, *, lowfreq=50, highfreq=4500, energylow=10, energyhigh=50, reverse=False):
         super().__init__(led_count)
         self.sampleinfo = sampleinfo
 
