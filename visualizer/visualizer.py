@@ -58,9 +58,6 @@ class Visualizer(object):
         active = False
         silent_frames = 0
 
-        self._start_sender()
-        active = True
-
         while run:
             # Input
             raw = stream.read(CHUNK, exception_on_overflow=False)
