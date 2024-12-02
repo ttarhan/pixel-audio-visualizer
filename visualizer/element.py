@@ -45,7 +45,7 @@ class Element:
 
     def render(self, audio, audiofft):
         """
-        Render the Element with the given audio
+        Render the Element (with the given audio, if available)
         """
         channel_data = np.full((self.led_count, 3), 0, dtype = np.uint8)
 

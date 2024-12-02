@@ -43,4 +43,9 @@ pool_tree_two.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_two.led_count, color
 kylies_room = Element(12, 221)
 kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
 
-ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, kylies_room]
+test_element = Element(15, 100)
+
+AUDIO_ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, kylies_room]
+FULLTIME_ELEMENTS = [test_element]
+
+ELEMENTS = [*AUDIO_ELEMENTS, *FULLTIME_ELEMENTS]
