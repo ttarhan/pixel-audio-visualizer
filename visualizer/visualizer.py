@@ -58,6 +58,8 @@ class Visualizer(object):
         audio_elements_active = False
         silent_frames = 0
 
+        print("Running")
+
         while run:
             # Input
             raw = stream.read(CHUNK, exception_on_overflow=False)
