@@ -5,7 +5,7 @@ import numpy as np
 from scipy import fftpack as fft
 import sacn
 
-from .config import AUDIO_ELEMENTS, FULLTIME_ELEMENTS, ELEMENTS, DMX_FPS, FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_SECONDS, FRAME_FPS
+from .config import ELEMENTS, DMX_FPS, DATA_SOURCES, CLOCK_SOURCE
 
 np.set_printoptions(threshold=500000)
 
@@ -18,18 +18,26 @@ class Visualizer(object):
 
     def __init__(self):
         self.sender = None
-        self.audio_universes = tuple(universe for element in AUDIO_ELEMENTS for universe in element.get_universes())
-        self.fulltime_universes = tuple(universe for element in FULLTIME_ELEMENTS for universe in element.get_universes())
-        self.universes = [*self.audio_universes, *self.fulltime_universes]
+        self.all_universes = tuple(universe for element in ELEMENTS for universe in element.get_universes())
+        self.active_universes = set()
 
-    def _start_universes(self, universes):
-        for universe in universes:
-            self.sender.activate_output(universe)
-            self.sender[universe].multicast = True
+    def _start_universe(self, universe):
+        print(f"Start universe: {universe}")
+        self.sender.activate_output(universe)
+        self.sender[universe].multicast = True
 
-    def _stop_universes(self, universes):
-        for universe in universes:
-            self.sender.deactivate_output(universe)
+    def _stop_universe(self, universe):
+        print(f"Stop universe: {universe}")
+        self.sender.deactivate_output(universe)
+
+    def _manage_universes(self, desired_active_universes):
+        for universe in self.all_universes:
+            if universe in desired_active_universes and universe not in self.active_universes:
+                self._start_universe(universe)
+                self.active_universes.add(universe)
+            elif universe not in desired_active_universes and universe in self.active_universes:
+                self._stop_universe(universe)
+                self.active_universes.discard(universe)
 
     def run(self):
         """
@@ -41,62 +49,36 @@ class Visualizer(object):
                                       bind_address=BIND_ADDRESS)
         
         self.sender.start()
-        
-        self._start_universes(self.fulltime_universes)
-        
-        audio = pyaudio.PyAudio()
 
-        stream = audio.open(format=FORMAT,
-                            channels=CHANNELS,
-                            rate=RATE,
-                            input=True,
-                            frames_per_buffer=CHUNK)
+        for datasource in DATA_SOURCES.values():
+            datasource.start()
 
+        CLOCK_SOURCE.start()
+        
         # Main loop
         lt = time.time()
         run = True
-        audio_elements_active = False
-        silent_frames = 0
 
         print("Running")
 
         while run:
-            # Input
-            raw = stream.read(CHUNK, exception_on_overflow=False)
-            audio = np.frombuffer(raw, dtype=np.float32)
+            # Clock cycle
+            CLOCK_SOURCE.tick()
+
+            # Data source processing
+            for datasource in DATA_SOURCES.values():
+                datasource.process()
             
-            # Silence detection
-            if np.max(audio) > SILENCE_THRESHOLD:
-                silent_frames = 0
-
-                if not audio_elements_active:
-                    print("Starting audio elements")
-                    self._start_universes(self.audio_universes)
-                    audio_elements_active = True
-            
-            else:
-                silent_frames += 1
-
-                if audio_elements_active and silent_frames > (FRAME_FPS * SILENCE_SECONDS):
-                    print("Stopping audio elements")
-                    self._stop_universes(self.audio_universes)
-                    audio_elements_active = False
-
             # Get ready to process elements
-            elements_to_process = [*FULLTIME_ELEMENTS]
-            audiofft = None
-
-            # Audio elements
-            if audio_elements_active:
-                # Analyze the spectrum
-                audiofft = abs(fft.rfft(audio))
-                elements_to_process.extend(AUDIO_ELEMENTS)
+            elements_to_process = tuple(element for element in ELEMENTS if element.is_active())
+            universes_to_process = tuple(universe for element in elements_to_process for universe in element.get_universes())
+            self._manage_universes(universes_to_process)
             
             # Process elements
             universe_data = dict()
 
             for e in elements_to_process:
-                render_result = e.render(audio, audiofft)
+                render_result = e.render(DATA_SOURCES)
                 universe_data.update(render_result)
 
             # Process output
@@ -110,6 +92,3 @@ class Visualizer(object):
 
         # Cleanup
         self.sender.stop()
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()

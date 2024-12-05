@@ -2,6 +2,7 @@ import numpy as np
 from scipy import fftpack as fft
 
 from .effect import Effect
+from .audiodatasource import AudioDataSource
 
 COLORS = [
     (0, 0, 255),
@@ -42,7 +43,9 @@ class AudioSpectrum(Effect):
 
         self.ln = None
 
-    def render(self, audio, audiofft, data):
+    def render(self, context, channel_data):
+        audiofft = AudioDataSource.from_context(context).audio_data_fft
+
         # dBS = 10 * np.log10(audiofft)
 
         newvalues = list(groupbins(self.binned, audiofft))
@@ -62,7 +65,7 @@ class AudioSpectrum(Effect):
             endchan = chan + self.led_multiple - 1
             buffer[chan:endchan + 1] = COLORS[colorindex]
 
-        data[0:0 + self.led_count] = np.flip(buffer, 0) if self.reverse else buffer
+        channel_data[0:0 + self.led_count] = np.flip(buffer, 0) if self.reverse else buffer
 
         if self.ln is not None:
             self.ln.remove()

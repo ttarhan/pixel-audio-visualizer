@@ -10,7 +10,7 @@ class Effect(ABC):
         self.led_count = led_count
 
     @abstractmethod
-    def render(self, audio, audiofft, data):
+    def render(self, context, channel_data):
         """
         Render the effect with the given audio
         """

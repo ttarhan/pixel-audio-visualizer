@@ -2,6 +2,7 @@ import numpy as np
 from scipy import fftpack as fft
 
 from .effect import Effect
+from .audiodatasource import AudioDataSource
 
 # Using max on amplitude
 # ENERGY_LOW = 0.1
@@ -44,7 +45,9 @@ class AudioEnergy(Effect):
         self.lowpass_cutoff = self.frequencies[self.frequencies < self.energylow]
         self.color_frames = 0
 
-    def render(self, audio, audiofft, data):
+    def render(self, context, channel_data):
+        audiofft = AudioDataSource.from_context(context).audio_data_fft
+
         filteredudio = audiofft[self.frequencies < self.energylowpass]
         ssq = np.sum(filteredudio**2)
 
@@ -60,4 +63,4 @@ class AudioEnergy(Effect):
 
         self.color_frames += 1
 
-        data[0:0 + height] = COLORS[self.color_index % len(COLORS)]
+        channel_data[0:0 + height] = COLORS[self.color_index % len(COLORS)]

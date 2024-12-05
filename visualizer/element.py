@@ -21,7 +21,8 @@ class Element:
     Represents a physical element like a string of LED pixels or an LED strip.
     """
 
-    def __init__(self, start_universe, led_count):
+    def __init__(self, active_criteria, start_universe, led_count):
+        self.active_criteria = active_criteria
         self.start_universe = start_universe
         self.led_count = led_count
         self.num_universes = math.ceil(led_count/MAX_PIXELS_PER_UNIVERSE)
@@ -43,16 +44,23 @@ class Element:
         """
         return tuple(range(self.start_universe, self.start_universe + self.num_universes))
 
-    def render(self, audio, audiofft):
+    def render(self, context):
         """
         Render the Element (with the given audio, if available)
         """
         channel_data = np.full((self.led_count, 3), 0, dtype = np.uint8)
 
         for e in self.effects:
-            e.effect.render(audio, audiofft, channel_data[e.position : e.position + e.led_count])
+            e.effect.render(context, channel_data[e.position : e.position + e.led_count])
 
         return self._as_universe_data(channel_data)
+    
+    def is_active(self):
+        """
+        Return true if the Element is active
+        """
+
+        return self.active_criteria() if callable(self.active_criteria) else self.active_criteria
 
     def _as_universe_data(self, channel_data):
         universe_data = dict()

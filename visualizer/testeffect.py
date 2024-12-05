@@ -10,5 +10,5 @@ class TestEffect(Effect):
     def __init__(self, led_count):
         super().__init__(led_count)
 
-    def render(self, audio, audiofft, data):
-        data[0:self.led_count] = np.reshape(range(0,self.led_count * 3), (-1, 3))
+    def render(self, context, channel_data):
+        channel_data[0:self.led_count] = np.reshape(range(0,self.led_count * 3), (-1, 3))
