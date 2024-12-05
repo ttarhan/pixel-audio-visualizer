@@ -3,11 +3,12 @@ import pyaudio
 
 from .element import Element
 from .audiodatasource import AudioDataSource
+from .cvdatasource import CvDataSource
 
 from .spectrum import AudioSpectrum
 from .energy import AudioEnergy
 from .energy2 import AudioEnergy2
-from .humantracker import HumanTrackerEffect
+from .chaser import ChaserEffect
 from .testeffect import TestEffect
 
 @dataclass
@@ -37,10 +38,12 @@ SAMPLE_INFO = SampleInfo(
 )
 
 audiods = AudioDataSource(SAMPLE_INFO, SILENCE_THRESHOLD, SILENCE_SECONDS)
+cvds = CvDataSource()
 
 CLOCK_SOURCE = audiods
 DATA_SOURCES = {
-    AudioDataSource.context_key(): audiods
+    AudioDataSource.context_key(): audiods,
+    CvDataSource.context_key(): cvds
 }
 
 pool_side = Element(audiods.is_active, 5, 412)
@@ -58,12 +61,12 @@ kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
 
 # test_element = Element(15, 100)
 
-step1 = Element(True, 110, 232) # Wrong number of pixels
-step2 = Element(True, 120, 196)
-step3 = Element(True, 130, 232)
+step1 = Element(cvds.is_active, 110, 232) # Wrong number of pixels
+step2 = Element(cvds.is_active, 120, 196)
+step3 = Element(cvds.is_active, 130, 232)
 
-step1.add_effect(HumanTrackerEffect(step1.led_count))
-step2.add_effect(HumanTrackerEffect(step2.led_count))
-step3.add_effect(HumanTrackerEffect(step3.led_count))
+step1.add_effect(ChaserEffect(step1.led_count, CvDataSource, "position"))
+step2.add_effect(ChaserEffect(step2.led_count, CvDataSource, "position"))
+step3.add_effect(ChaserEffect(step3.led_count, CvDataSource, "position"))
 
 ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, step3]
