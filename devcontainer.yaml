@@ -1,0 +1,88 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: pixel-network
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "pixel-network",
+    "type": "vlan",
+    "master": "eth0",
+    "vlanId": 10,
+    "linkInContainer": false,
+    "ipam": {
+      "type": "static",
+      "addresses": [
+        {
+          "address": "192.168.254.52/24"
+        }
+      ]
+    }
+  }'
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: visualizer-dev-pv
+spec:
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: nas1.local
+    path: /volume1/k8s-volumes/static/visualizer-dev-volume
+  mountOptions:
+    - defaults
+    - noatime
+    - vers=3
+    - proto=tcp
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: visualizer-dev-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Mi
+  volumeName: visualizer-dev-pv
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: visualizer-dev
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+      {
+        "name" : "pixel-network"
+      }
+    ]'
+spec:
+  containers:
+    - name: dev
+      image: python:3.12.7-bookworm
+      command:
+        - /bin/sleep
+        - infinity
+      env:
+        - name: BIND_ADDRESS
+          value: 192.168.254.52
+      volumeMounts:
+        - name: nfs
+          mountPath: /root
+      resources:
+        limits:
+          device.k8.ttar.org/audio: "1"
+          device.k8.ttar.org/usbsound: "1"
+      securityContext:
+        capabilities:
+          add: ["SYS_NICE"]
+  terminationGracePeriodSeconds: 0
+  volumes:
+    - name: nfs
+      persistentVolumeClaim:
+        claimName: visualizer-dev-pvc
