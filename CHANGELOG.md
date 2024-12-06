@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v2.0.1...v3.0.0) (2024-12-06)
+
+
+### Miscellaneous Chores
+
+* release 3.0.0 ([833c10b](https://github.com/ttarhan/pixel-audio-visualizer/commit/833c10bd9c7b0590cdb881c5441969ee3624daa4))
+
 ## [2.0.1](https://github.com/ttarhan/pixel-audio-visualizer/compare/v2.0.0...v2.0.1) (2024-11-02)
 
 
