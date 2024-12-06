@@ -29,3 +29,15 @@ package = true
 
 [tool.setuptools]
 packages = ["visualizer"]
+
+[tool.black]
+line-length = 120
+
+[dependency-groups]
+dev = [
+    "black>=24.10.0",
+    "mypy>=1.13.0",
+    "pylint>=3.3.2",
+    "scipy-stubs>=1.14.1.5",
+    "types-pyaudio>=0.2.16.20240516",
+]

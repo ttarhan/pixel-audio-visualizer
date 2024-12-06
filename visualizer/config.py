@@ -1,23 +1,13 @@
-from dataclasses import dataclass
 import pyaudio
 
 from .element import Element
-from .audiodatasource import AudioDataSource
+from .audiodatasource import AudioDataSource, SampleInfo
 from .cvdatasource import CvDataSource
 
 from .spectrum import AudioSpectrum
 from .energy import AudioEnergy
-from .energy2 import AudioEnergy2
 from .chaser import ChaserEffect
-from .testeffect import TestEffect
 
-@dataclass
-class SampleInfo(object):
-    rate: int
-    chunk: int
-    fps: int
-    format: int
-    channels: int
 
 FORMAT = pyaudio.paFloat32
 CHANNELS = 1
@@ -27,15 +17,9 @@ FRAME_FPS = 25
 
 SILENCE_THRESHOLD = 0.05
 SILENCE_SECONDS = 5
-CHUNK = int(RATE/FRAME_FPS)
+CHUNK = int(RATE / FRAME_FPS)
 
-SAMPLE_INFO = SampleInfo(
-    rate = RATE,
-    chunk = CHUNK,
-    fps = FRAME_FPS,
-    format = FORMAT,
-    channels = CHANNELS
-)
+SAMPLE_INFO = SampleInfo(rate=RATE, chunk=CHUNK, fps=FRAME_FPS, format=FORMAT, channels=CHANNELS)
 
 audiods = AudioDataSource(SAMPLE_INFO, SILENCE_THRESHOLD, SILENCE_SECONDS)
 cvds = CvDataSource()
@@ -43,7 +27,7 @@ cvds = CvDataSource()
 CLOCK_SOURCE = audiods
 DATA_SOURCES = {
     AudioDataSource.context_key(): audiods,
-    CvDataSource.context_key(): cvds
+    CvDataSource.context_key(): cvds,
 }
 
 pool_side = Element(audiods.is_active, 5, 412)
@@ -61,7 +45,7 @@ kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
 
 # test_element = Element(15, 100)
 
-step1 = Element(cvds.is_active, 110, 232) # Wrong number of pixels
+step1 = Element(cvds.is_active, 110, 232)  # Wrong number of pixels
 step2 = Element(cvds.is_active, 120, 196)
 step3 = Element(cvds.is_active, 130, 232)
 

@@ -7,13 +7,13 @@ class ClockSource(ABC):
     """
 
     @abstractmethod
-    def start(self):
+    def start(self) -> None:
         """
         Start the clock
         """
 
     @abstractmethod
-    def tick(self):
+    def tick(self) -> None:
         """
         Block until the next clock cycle, then return
         """
