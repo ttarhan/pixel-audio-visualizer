@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.0.0...v3.1.0) (2024-12-15)
+
+
+### Features
+
+* Working chase effect ([b26fae8](https://github.com/ttarhan/pixel-audio-visualizer/commit/b26fae80cfd29987865c7eec9cd20273faecfb61))
+
 ## [3.0.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v2.0.1...v3.0.0) (2024-12-06)
 
 
