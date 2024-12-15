@@ -21,8 +21,10 @@ CHUNK = int(RATE / FRAME_FPS)
 
 SAMPLE_INFO = SampleInfo(rate=RATE, chunk=CHUNK, fps=FRAME_FPS, format=FORMAT, channels=CHANNELS)
 
+CV_INACTIVE_SECONDS = 2
+
 audiods = AudioDataSource(SAMPLE_INFO, SILENCE_THRESHOLD, SILENCE_SECONDS)
-cvds = CvDataSource()
+cvds = CvDataSource(CV_INACTIVE_SECONDS * SAMPLE_INFO.fps, adjustment = 0.02)
 
 CLOCK_SOURCE = audiods
 DATA_SOURCES = {
@@ -43,14 +45,12 @@ pool_tree_two.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_two.led_count, color
 kylies_room = Element(audiods.is_active, 12, 221)
 kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
 
-# test_element = Element(15, 100)
-
-step1 = Element(cvds.is_active, 110, 232)  # Wrong number of pixels
+step1 = Element(cvds.is_active, 110, 90)
 step2 = Element(cvds.is_active, 120, 196)
 step3 = Element(cvds.is_active, 130, 232)
 
-step1.add_effect(ChaserEffect(step1.led_count, CvDataSource, "position"))
-step2.add_effect(ChaserEffect(step2.led_count, CvDataSource, "position"))
-step3.add_effect(ChaserEffect(step3.led_count, CvDataSource, "position"))
+step1.add_effect(ChaserEffect(step1.led_count, CvDataSource, CvDataSource.POSITION, start=0.644, end=1.000))
+step2.add_effect(ChaserEffect(step2.led_count, CvDataSource, CvDataSource.POSITION, start=0.220, end=1.000))
+step3.add_effect(ChaserEffect(step3.led_count, CvDataSource, CvDataSource.POSITION, start=0.000, end=0.924))
 
-ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, step3]
+ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, step1, step2, step3]

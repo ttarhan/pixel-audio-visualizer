@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 from dataclasses import dataclass
 
@@ -62,16 +63,10 @@ class AudioDataSource(DataSource, ClockSource):
         self.running = True
 
     def tick(self) -> None:
-        if not self.active or self.stream is None:
-            return
-
         raw = self.stream.read(self.sampleinfo.chunk, exception_on_overflow=False)
         self.rawaudio = np.frombuffer(raw, dtype=np.float32)
 
     def process(self) -> None:
-        if self.rawaudio is None:
-            return
-
         # Silence detection
         if np.max(self.rawaudio) > self.silence_threshold:
             self.silent_frames = 0
@@ -87,8 +82,9 @@ class AudioDataSource(DataSource, ClockSource):
                 print("Audio inactive")
                 self.active = False
 
-        self.audio_data = self.rawaudio if self.active else None
-        self.audio_data_fft = abs(fft.rfft(self.rawaudio)) if self.active else None
+        if self.active:
+            self.audio_data = self.rawaudio if self.active else None
+            self.audio_data_fft = abs(fft.rfft(self.rawaudio)) if self.active else None
 
     def is_active(self) -> bool:
         """

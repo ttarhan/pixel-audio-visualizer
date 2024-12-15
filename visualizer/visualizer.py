@@ -87,7 +87,7 @@ class Visualizer:
                 flatened_bytes = tuple(flatened.tobytes())
                 self.sender[universe].dmx_data = flatened_bytes
 
-            # print(f'Diff: {round(time.time()-lt,4)}')
+            # print(f"Diff: {round(time.time()-lt,4)}")
             lt = time.time()
 
         # Cleanup
