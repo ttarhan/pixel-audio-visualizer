@@ -53,4 +53,4 @@ step1.add_effect(ChaserEffect(step1.led_count, CvDataSource, CvDataSource.POSITI
 step2.add_effect(ChaserEffect(step2.led_count, CvDataSource, CvDataSource.POSITION, start=0.220, end=1.000))
 step3.add_effect(ChaserEffect(step3.led_count, CvDataSource, CvDataSource.POSITION, start=0.000, end=0.924))
 
-ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, step1, step2, step3]
+ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, kylies_room, step1, step2, step3]
