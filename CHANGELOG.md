@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.1.0...v3.2.0) (2025-04-12)
+
+
+### Features
+
+* Readd Kylie’s room ([ecec5f2](https://github.com/ttarhan/pixel-audio-visualizer/commit/ecec5f2f52131fe8b8ef9ca1c156dc028e7e7d9a))
+
 ## [3.1.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.0.0...v3.1.0) (2024-12-15)
 
 
