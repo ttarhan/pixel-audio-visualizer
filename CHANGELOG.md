@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.2.0...v3.3.0) (2025-04-15)
+
+
+### Features
+
+* update for pi5 ([5cbc86b](https://github.com/ttarhan/pixel-audio-visualizer/commit/5cbc86b3a248d44c21e7918e6facf23419af3252))
+
 ## [3.2.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.1.0...v3.2.0) (2025-04-12)
 
 
