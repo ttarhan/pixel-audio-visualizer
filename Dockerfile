@@ -17,7 +17,6 @@ RUN uv sync
 COPY . .
 RUN uv sync
 
-ENV PA_MIN_LATENCY_MSEC=4
 ENV CAPTURE_GAIN=5
 
 CMD ./run.sh

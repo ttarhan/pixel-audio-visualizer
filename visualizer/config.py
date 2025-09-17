@@ -1,5 +1,6 @@
 import pyaudio
 
+from .universe_config import UniverseConfig
 from .element import Element
 from .audiodatasource import AudioDataSource, SampleInfo
 from .cvdatasource import CvDataSource
@@ -32,18 +33,29 @@ DATA_SOURCES = {
     CvDataSource.context_key(): cvds,
 }
 
+DEFAULT_UNIVERSE_CONFIG = UniverseConfig()
+
+UNIVERSE_CONFIG = {
+    5: UniverseConfig(multicast=False, destination="192.168.254.22"),
+    6: UniverseConfig(multicast=False, destination="192.168.254.22"),
+    7: UniverseConfig(multicast=False, destination="192.168.254.22"),
+    12: UniverseConfig(multicast=False, destination="192.168.254.62"),
+    13: UniverseConfig(multicast=False, destination="192.168.254.62"),
+    50: UniverseConfig(multicast=False, destination="192.168.254.119"),
+}
+
 pool_side = Element(audiods.is_active, 5, 412)
 pool_side.add_effect(AudioSpectrum(SAMPLE_INFO, 206), position=0)
 pool_side.add_effect(AudioSpectrum(SAMPLE_INFO, 206, reverse=True), position=206)
 
-pool_tree_one = Element(audiods.is_active, 8, 100)
-pool_tree_one.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_one.led_count))
+# pool_tree_one = Element(audiods.is_active, 8, 100)
+# pool_tree_one.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_one.led_count))
 
-pool_tree_two = Element(audiods.is_active, 9, 100)
-pool_tree_two.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_two.led_count, color_index=1))
+# pool_tree_two = Element(audiods.is_active, 9, 100)
+# pool_tree_two.add_effect(AudioEnergy(SAMPLE_INFO, pool_tree_two.led_count, color_index=1))
 
-kylies_room = Element(audiods.is_active, 12, 221)
-kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
+# kylies_room = Element(audiods.is_active, 12, 221)
+# kylies_room.add_effect(AudioSpectrum(SAMPLE_INFO, kylies_room.led_count))
 
 step1 = Element(cvds.is_active, 110, 90)
 step2 = Element(cvds.is_active, 120, 196)
@@ -53,5 +65,7 @@ step1.add_effect(ChaserEffect(step1.led_count, CvDataSource, CvDataSource.POSITI
 step2.add_effect(ChaserEffect(step2.led_count, CvDataSource, CvDataSource.POSITION, start=0.220, end=1.000))
 step3.add_effect(ChaserEffect(step3.led_count, CvDataSource, CvDataSource.POSITION, start=0.000, end=0.924))
 
+halloweentunnel1 = Element(audiods.is_active, 50, 100)
+halloweentunnel1.add_effect(AudioEnergy(SAMPLE_INFO, halloweentunnel1.led_count))
 
-ELEMENTS = [pool_side, pool_tree_one, pool_tree_two, kylies_room, step1, step2, step3]
+ELEMENTS = [pool_side, step1, step2, step3, halloweentunnel1] # kylies_room

@@ -4,7 +4,7 @@ from typing import Iterable, Set
 import numpy as np
 import sacn
 
-from .config import ELEMENTS, DMX_FPS, DATA_SOURCES, CLOCK_SOURCE
+from .config import ELEMENTS, DMX_FPS, DATA_SOURCES, CLOCK_SOURCE, UNIVERSE_CONFIG, DEFAULT_UNIVERSE_CONFIG
 
 np.set_printoptions(threshold=500000)
 
@@ -24,7 +24,16 @@ class Visualizer:
     def _start_universe(self, universe: int) -> None:
         print(f"Start universe: {universe}")
         self.sender.activate_output(universe)
-        self.sender[universe].multicast = True
+
+        universe_config = UNIVERSE_CONFIG.get(universe, DEFAULT_UNIVERSE_CONFIG)
+
+        if universe_config.multicast:
+            self.sender[universe].multicast = True
+            print(f"Warning: universe: {universe} is multicast")
+        elif universe_config.destination:
+            self.sender[universe].destination = universe_config.destination
+        else:
+            raise ValueError(f"Unexpected universe config for universe {universe}")
 
     def _stop_universe(self, universe: int) -> None:
         print(f"Stop universe: {universe}")
