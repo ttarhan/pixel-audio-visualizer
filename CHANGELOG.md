@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.4.0...v3.5.0) (2025-09-17)
+
+
+### Features
+
+* Add external config to chart ([b394f8e](https://github.com/ttarhan/pixel-audio-visualizer/commit/b394f8e1c5455a6ae05235267e6731c9ddaf2a2c))
+* Add external config to chart ([28ff4f1](https://github.com/ttarhan/pixel-audio-visualizer/commit/28ff4f12332e2da8b671c941c0e931a59773da45))
+
 ## [3.4.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.3.0...v3.4.0) (2025-09-17)
 
 
