@@ -6,9 +6,9 @@ set -xeuo pipefail
 if [ -f /var/run/secrets/kubernetes.io/serviceaccount/token ] || [ "$KUBERNETES_SERVICE_HOST" != "" ]; then
 	# Only run this block if in k8s
 	if [ ! -f /data/config.py ]; then
-		cp /app/visualizer/config.py /data/config.py
+		cp ./visualizer/config.py /data/config.py
 	fi
-	cp /data/config.py /app/visualizer/config.py
+	cp /data/config.py ./visualizer/config.py
 
 	# Allow environment variables to be set in /data/env
 	if [ ! -f /data/env ]; then
