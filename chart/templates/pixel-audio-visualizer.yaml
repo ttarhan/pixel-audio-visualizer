@@ -42,6 +42,9 @@ spec:
               value: {{ required "An sender IP must be provided" .Values.sender_ip | quote }}
             - name: CAPTURE_GAIN
               value: {{ .Values.capture_gain | default "5" | quote }}
+          volumeMounts:
+            - mountPath: /data
+              name: pixel-visualizer-data
           resources:
             limits:
               device.k8.ttar.org/audio: "1"
@@ -50,3 +53,7 @@ spec:
             capabilities:
               add: ["SYS_NICE"]
       terminationGracePeriodSeconds: 0
+      volumes:
+        - name: pixel-visualizer-data
+          persistentVolumeClaim:
+            claimName: pixel-visualizer-pvc

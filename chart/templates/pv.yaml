@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mosquitto-pvc
+spec:
+  storageClassName: "" # Don't dynamically create this volume
+  volumeName: pixel-visualizer-pv
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pixel-visualizer-pv
+spec:
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  mountOptions:
+  - noatime
+  - vers=3
+  - proto=tcp
+  nfs:
+    path: /volume1/k8s-volumes/static/pixel-visualizer-pv
+    server: 192.168.1.245
+  volumeMode: Filesystem
