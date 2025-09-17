@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.1](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.0...v3.5.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* PV definitionw as wrong ([f8d1a6e](https://github.com/ttarhan/pixel-audio-visualizer/commit/f8d1a6e788fda75fd172c825c01f7d02c1261db2))
+
 ## [3.5.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.4.0...v3.5.0) (2025-09-17)
 
 
