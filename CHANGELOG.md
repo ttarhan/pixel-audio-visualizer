@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.3.0...v3.4.0) (2025-09-17)
+
+
+### Features
+
+* Add universe config ([4d5d7fa](https://github.com/ttarhan/pixel-audio-visualizer/commit/4d5d7fa387b1d6122ef4564e2e058b2a85700690))
+
 ## [3.3.0](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.2.0...v3.3.0) (2025-04-15)
 
 
