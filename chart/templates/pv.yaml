@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mosquitto-pvc
+  name: pixel-visualizer-pvc
 spec:
   storageClassName: "" # Don't dynamically create this volume
   volumeName: pixel-visualizer-pv
