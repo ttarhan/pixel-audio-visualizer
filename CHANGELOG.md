@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.2](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.1...v3.5.2) (2026-10-02)
+
+
+### Bug Fixes
+
+* attach to the pixel VLAN through the host pixelvlan interface ([#27](https://github.com/ttarhan/pixel-audio-visualizer/issues/27)) ([458d1f5](https://github.com/ttarhan/pixel-audio-visualizer/commit/458d1f59bb36f09df10c90bf84a4cdb14ea383cb))
+
 ## [3.5.1](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.0...v3.5.1) (2025-09-17)
 
 
