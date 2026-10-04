@@ -32,6 +32,13 @@ spec:
           }
         ]'
     spec:
+      # The device-plugin resource below matches a model of USB sound card,
+      # not a particular card, so it no longer picks one node once more than
+      # one Pi has that model. Pin to the Pi whose card carries the audio feed.
+      {{- with .Values.node }}
+      nodeSelector:
+        kubernetes.io/hostname: {{ . }}
+      {{- end }}
       containers:
         - name: app
           image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
