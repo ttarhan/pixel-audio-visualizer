@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.2...v3.5.3) (2026-10-04)
+
+
+### Bug Fixes
+
+* pin to a node when the node value is set ([25f2284](https://github.com/ttarhan/pixel-audio-visualizer/commit/25f2284d6c4dba0dddd385b613301eb6f9f7795f))
+
 ## [3.5.2](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.1...v3.5.2) (2026-10-02)
 
 
