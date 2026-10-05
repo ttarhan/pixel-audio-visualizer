@@ -2,5 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "One PR for the CI workflow (actions, runner image) instead of one per action",
+      "matchManagers": ["github-actions"],
+      "groupName": "CI workflow"
+    }
   ]
 }
