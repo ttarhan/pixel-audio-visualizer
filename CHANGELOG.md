@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.4](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.3...v3.5.4) (2026-10-05)
+
+
+### Bug Fixes
+
+* **deps:** run on Python 3.14 and update compiled dependencies ([#32](https://github.com/ttarhan/pixel-audio-visualizer/issues/32)) ([588c584](https://github.com/ttarhan/pixel-audio-visualizer/commit/588c58421bb923a1e7d677348e4ccfbfbae18dd3))
+
 ## [3.5.3](https://github.com/ttarhan/pixel-audio-visualizer/compare/v3.5.2...v3.5.3) (2026-10-04)
 
 
